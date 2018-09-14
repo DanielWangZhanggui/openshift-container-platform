@@ -349,16 +349,17 @@ echo $(date) " - Registry automatically deployed to infra nodes">> ~/log.txt
 echo $(date) " - Router automaticaly deployed to infra nodes">> ~/log.txt
 echo $(date) " - Re-enabling requiretty"
 sed -i -e "s/# Defaults    requiretty/Defaults    requiretty/" /etc/sudoers
-
+echo $(date) " - good 3">> ~/log.txt
 # Install OpenShift Atomic Client
 cd /root
-mkdir .kube
+mkdir -p .kube
+echo $(date) " - good 4">> ~/log.txt
 runuser ${SUDOUSER} -c "scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${SUDOUSER}@${MASTER}-0:~/.kube/config /tmp/kube-config"
-cp /tmp/kube-config /root/.kube/config
-mkdir /home/${SUDOUSER}/.kube
-cp /tmp/kube-config /home/${SUDOUSER}/.kube/config
+yes | cp /tmp/kube-config /root/.kube/config
+mkdir -p /home/${SUDOUSER}/.kube
+yes| cp /tmp/kube-config /home/${SUDOUSER}/.kube/config
 chown --recursive ${SUDOUSER} /home/${SUDOUSER}/.kube
-rm -f /tmp/kube-config
+rm -rf /tmp/kube-config
 yum -y install atomic-openshift-clients
 
 # Adding user to OpenShift authentication file
